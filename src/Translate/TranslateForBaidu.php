@@ -6,7 +6,7 @@ use Sxqibo\FastTranslate\TranslateInterface;
 
 /**
  * 百度接口的实现类
- * https://qifu-api.baidubce.com/ip/geo/v1/district?ip=39.144.96.133
+ * @doc https://api.fanyi.baidu.com/doc/21
  */
 final class TranslateForBaidu extends Translate implements TranslateInterface
 {
@@ -24,7 +24,7 @@ final class TranslateForBaidu extends Translate implements TranslateInterface
     {
         parent::__construct($config);
         $this->host = self::HOST;
-        $this->uri = self::URI;
+        $this->uri  = self::URI;
     }
 
     /**
@@ -34,26 +34,15 @@ final class TranslateForBaidu extends Translate implements TranslateInterface
      * @param string $to 翻译目标
      * @return null
      */
-    public function getTranslate(string $query, string $from, string $to)
+    public function getTranslate(string $query, string $from, string $to): ?array
     {
-        $result = parent::getTranslate($query,  $from, $to);
+        $result = parent::getTranslate($query, $from, $to);
 
-        return $this->standardResult($result);
-    }
-
-    /**
-     * 对请求结果的处理
-     * @param string $result 请求结果
-     * @return void
-     */
-    private function standardResult(array $result)
-    {
         return [
             'language_from' => $result['from'],
-            'language_to' => $result['to'],
-            'result_src' => $result['trans_result'][0]['src'],
-            'result_dst' => $result['trans_result'][0]['dst'],
+            'language_to'   => $result['to'],
+            'result_src'    => $result['trans_result'][0]['src'],
+            'result_dst'    => $result['trans_result'][0]['dst'],
         ];
-
     }
 }
