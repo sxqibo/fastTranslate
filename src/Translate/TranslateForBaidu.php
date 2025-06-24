@@ -20,6 +20,8 @@ final class TranslateForBaidu extends Translate implements TranslateInterface
      */
     const URI = '/api/trans/vip/translate';
 
+    const TYPE = 'baidu';
+
     public function __construct($config = [])
     {
         parent::__construct($config);
@@ -34,9 +36,9 @@ final class TranslateForBaidu extends Translate implements TranslateInterface
      * @param string $to 翻译目标
      * @return null
      */
-    public function getTranslate(string $query, string $from, string $to): ?array
+    public function getTranslation(string $query, string $from, string $to): ?array
     {
-        $result = parent::getTranslate($query, $from, $to);
+        $result = parent::getTranslate($query, $from, $to, self::TYPE);
 
         return [
             'language_from' => $result['from'],

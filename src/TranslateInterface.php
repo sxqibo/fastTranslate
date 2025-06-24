@@ -14,5 +14,5 @@ interface TranslateInterface
      * @param string $to 目标语言
      * @return mixed
      */
-    public function getTranslate(string $query, string $from, string $to);
+    public function getTranslation(string $query, string $from, string $to);
 }

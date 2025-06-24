@@ -21,8 +21,8 @@ class TranslateFactory
      * 获取具体翻译的类实例
      * 如果没有找到传入的类，则默认返回Baidu
      *
-     * @param string $objectName
-     * @param array $config
+     * @param string $objectName 默认百度翻译
+     * @param array $config 配置
      * @return \|mixed|null
      */
     public static function getTranslateObject(string $objectName = 'baidu', array $config = [])

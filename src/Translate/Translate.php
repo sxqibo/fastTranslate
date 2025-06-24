@@ -3,6 +3,8 @@
 namespace Sxqibo\FastTranslate\Translate;
 
 use Sxqibo\FastTranslate\TranslateInterface;
+use Google\Cloud\Translate\V2\TranslateClient;
+use Sxqibo\FastTranslate\Util\Common;
 
 /**
  * 获取 IP 地址的基类
@@ -19,10 +21,7 @@ abstract class Translate implements TranslateInterface
      */
     public string $uri = '';
 
-    /**
-     * @var int curl 超时时间
-     */
-    public int $curlTimeout = 10;
+
 
     /**
      * @var array 配置
@@ -42,120 +41,64 @@ abstract class Translate implements TranslateInterface
 
     /**
      * 帮子类调用 http 请求
-     * @param string $query
+     * @param string $word
      * @param string $from
      * @param string $to
      * @return mixed
      */
-    public function getTranslate(string $query, string $from, string $to)
+    public function getTranslate(string $word, string $from, string $to, $type = 'baidu')
     {
-        $args         = array(
-            'q'     => $query,
-            'appid' => $this->config['app_id'],
-            'salt'  => rand(10000, 99999),
-            'from'  => $from,
-            'to'    => $to,
+        $ret = [];
+        $common = new Common();
 
-        );
-        $args['sign'] = $this->buildSign($query, $this->config['app_id'], $args['salt'], $this->config['sec_key']);
-        $ret          = $this->call($this->host . $this->uri, $args);
-        $ret          = json_decode($ret, true);
-        return $ret;
-    }
-
-    /**
-     * 加密
-     * @param $query
-     * @param $appID
-     * @param $salt
-     * @param $secKey
-     * @return string
-     */
-    private function buildSign($query, $appID, $salt, $secKey): string
-    {
-        $str = $appID . $query . $salt . $secKey;
-        $ret = md5($str);
-        return $ret;
-    }
-
-    /**
-     * 发起网络请求
-     * @param $url
-     * @param $args
-     * @param $method
-     * @param $testflag
-     * @param $timeout
-     * @param $headers
-     * @return false|mixed
-     */
-    private function call($url, $args = null, $method = "post", $testflag = 0, $headers = array())
-    {
-        $ret = false;
-        $i   = 0;
-        while ($ret === false) {
-            if ($i > 1)
-                break;
-            if ($i > 0) {
-                sleep(1);
+        /**
+         * 百度翻译
+         */
+        if ($type == 'baidu') {
+            if (!$this->config['app_id']) {
+                return '请配置 app_id';
             }
-            $ret = $this->callOnce($url, $args, $method, false, $headers);
-            $i++;
+
+            if (!$this->config['sec_key']) {
+                return '请配置 sec_key';
+            }
+
+            $args         = array(
+                'q'     => $word,
+                'appid' => $this->config['app_id'],
+                'salt'  => rand(10000, 99999),
+                'from'  => $from,
+                'to'    => $to,
+
+            );
+
+
+            $args['sign'] = $common->buildSign($word, $this->config['app_id'], $args['salt'], $this->config['sec_key']);
+            $ret          = $common->call($this->host . $this->uri, $args, $options); // 添加 $options 参数
+            $ret          = json_decode($ret, true);
+
         }
+
+        /**
+         * 谷歌翻译
+         */
+        if ($type == 'googleV2') {
+            if (!$this->config['api_key']) {
+                return false;
+            }
+
+            $translate = new TranslateClient([
+                'key' => $this->config['api_key'],
+            ]);
+
+            $result = $translate->translate($word, [
+                'target' => $to,
+            ]);
+
+            $ret = $result['text'] ?? '';
+        }
+
         return $ret;
-    }
 
-    private function callOnce($url, $args = null, $method = "post", $withCookie = false, $headers = array())
-    {/*{{{*/
-        $ch = curl_init();
-        if ($method == "post") {
-            $data = $this->convert($args);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            curl_setopt($ch, CURLOPT_POST, 1);
-        } else {
-            $data = $this->convert($args);
-            if ($data) {
-                if (stripos($url, "?") > 0) {
-                    $url .= "&$data";
-                } else {
-                    $url .= "?$data";
-                }
-            }
-        }
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $this->curlTimeout);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        if (!empty($headers)) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        }
-        if ($withCookie) {
-            curl_setopt($ch, CURLOPT_COOKIEJAR, $_COOKIE);
-        }
-        $r = curl_exec($ch);
-        curl_close($ch);
-        return $r;
-    }
-
-
-    /**
-     * 参数转换
-     * @param $args
-     * @return string
-     */
-    private function convert(&$args): string
-    {
-        $data = '';
-        if (is_array($args)) {
-            foreach ($args as $key => $val) {
-                if (is_array($val)) {
-                    foreach ($val as $k => $v) {
-                        $data .= $key . '[' . $k . ']=' . rawurlencode($v) . '&';
-                    }
-                } else {
-                    $data .= "$key=" . rawurlencode($val) . "&";
-                }
-            }
-            return trim($data, "&");
-        }
-        return $args;
     }
 }
