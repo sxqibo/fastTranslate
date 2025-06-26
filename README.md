@@ -25,8 +25,8 @@ $addr = $obj->getTranslate('你好', 'auto', 'en', $type);
 
 网址：https://console.cloud.google.com/  
 优点： 谷歌翻译可以翻译，但识别源语言的接口特别多   
-缺点： 谷歌翻译V2需要api_key，本地测试需要翻墙， 需要信用卡配额（网址：https://console.cloud.google.com/billing）
-
+缺点： 谷歌翻译V2需要api_key，本地测试需要翻墙， 需要信用卡配额, 网址：https://console.cloud.google.com/billing
+说明： 谷歌翻译配置比较麻烦，需要创建项目，绑定支付账号， 申请api_key
 示例：
 
 ```php
@@ -36,5 +36,39 @@ $config  = [
 
 $type = 'googleV2';
 $obj  = TranslateFactory::getTranslateObject($type, $config);
-$addr = $obj->getTranslate('你好', 'zh', 'en', $type);
+$addr = $obj->getTranslate('你好', '', 'en', $type);
+```
+返回
+```json
+{
+  "source" : "zh-CN",
+  "input" : "你好",
+  "text" : "Hello",
+  "model" : ""
+}
+```
+
+说明： 谷歌翻译原生curl请求  
+```curl
+curl -X POST "https://translation.googleapis.com/language/translate/v2?key=API_KEY" \
+       -H "Content-Type: application/json" \
+       -d '{
+             "q": "你好",
+             "target": "en"
+           }'
+```
+原生返回：  
+```json
+
+{
+  "data": {
+    "translations": [
+      {
+        "translatedText": "Hello",
+        "detectedSourceLanguage": "zh-CN"
+      }
+    ]
+  }
+}
+
 ```

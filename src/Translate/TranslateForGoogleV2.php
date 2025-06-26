@@ -25,10 +25,6 @@ final class TranslateForGoogleV2 extends Translate implements TranslateInterface
      */
     public function getTranslation(string $query, string $from, string $to): ?array
     {
-        $result = parent::getTranslate($query, $from, $to, self::TYPE);
-
-        // TODO 由于目前无法访问，这里的方法暂时不写
-
-        return $result;
+        return parent::getTranslate($query, '', $to, self::TYPE);
     }
 }
