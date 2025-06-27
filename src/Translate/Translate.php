@@ -4,6 +4,7 @@ namespace Sxqibo\FastTranslate\Translate;
 
 use Sxqibo\FastTranslate\TranslateInterface;
 use Google\Cloud\Translate\V2\TranslateClient;
+use Google\Cloud\Translate\V3\TranslationServiceClient;
 use Sxqibo\FastTranslate\Util\Common;
 
 /**
@@ -96,6 +97,33 @@ abstract class Translate implements TranslateInterface
             ]);
 
             $ret = $result['text'] ?? '';
+        }
+
+        /**
+         * 谷歌翻译
+         */
+        if ($type == 'googleV3') {
+            if (!$this->config['project_id']) {
+                throw new \Exception('请配置 project_id');
+            }
+
+            // 这里只翻译一个
+            $content[0] = $word;
+
+            $translationClient = new TranslationServiceClient();
+            $response = $translationClient->translateText(
+                $content,
+                $to,
+                TranslationServiceClient::locationName($this->config['project_id'], 'global')
+            );
+
+            $result = [];
+            foreach ($response->getTranslations() as $key => $translation) {
+                array_push($result, $translation->getTranslatedText());
+            }
+
+            $ret = $result[0];
+
         }
 
         return $ret;

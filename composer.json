@@ -15,8 +15,8 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "~6.0",
-        "google/cloud-translate": "^1.15",
+        "guzzlehttp/guzzle": "7.9.3",
+        "google/cloud-translate": "1.15.4",
         "ext-mbstring": "*",
         "ext-json": "*",
         "ext-curl": "*"
