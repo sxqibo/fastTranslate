@@ -15,4 +15,11 @@ interface TranslateInterface
      * @return mixed
      */
     public function getTranslation(string $query, string $from, string $to);
+
+    /**
+     * 检测语言
+     * @param string $query
+     * @return mixed
+     */
+    public function detectLanguage(string $query);
 }

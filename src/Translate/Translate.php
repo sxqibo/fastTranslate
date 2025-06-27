@@ -75,7 +75,7 @@ abstract class Translate implements TranslateInterface
 
 
             $args['sign'] = $common->buildSign($word, $this->config['app_id'], $args['salt'], $this->config['sec_key']);
-            $ret          = $common->call($this->host . $this->uri, $args, $options); // 添加 $options 参数
+            $ret          = $common->call($this->host . $this->uri, $args); // 添加 $options 参数
             $ret          = json_decode($ret, true);
 
         }
@@ -123,6 +123,32 @@ abstract class Translate implements TranslateInterface
             }
 
             $ret = $result[0];
+
+        }
+
+        return $ret;
+    }
+
+
+    /**
+     * 获取语言
+     * @param string $word
+     * @return mixed
+     */
+    public function detect(string $word, $type = 'baidu')
+    {
+        /**
+         * 谷歌翻译
+         */
+        if ($type == 'googleV3') {
+            if (!$this->config['project_id']) {
+                throw new \Exception('请配置 project_id');
+            }
+
+            $translate = new TranslateClient();
+            $result = $translate->detectLanguage($word);
+
+            $ret = $result['languageCode'];
 
         }
 

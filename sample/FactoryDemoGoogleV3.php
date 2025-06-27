@@ -19,6 +19,18 @@ $config  = [
 ];
 
 $type = 'googleV3';
+
 $obj  = TranslateFactory::getTranslateObject($type, $config);
-$addr = $obj->getTranslate('你好', '', 'en', $type); // 源语言自动识别，翻译为英文
-print '3.谷歌V3翻译结果' . json_encode($addr, JSON_UNESCAPED_UNICODE) . PHP_EOL;
+
+
+// 源语言自动识别，翻译为英文
+$addr = $obj->getTranslate('你好', '', 'en', $type);
+print '3-1.谷歌V3翻译结果' . json_encode($addr, JSON_UNESCAPED_UNICODE) . PHP_EOL;
+
+
+// 检测源语言
+$detectResult = $obj->detect('Hola! Necesito saber en qué oficina se encuentra el paquete, ya que hay varias en el lugar donde resido y no se especifica nada en la web. He ido a algunas y no se encuentra ahí ', $type);
+print '3-2.谷歌V3检测源语言' . json_encode($detectResult, JSON_UNESCAPED_UNICODE) . PHP_EOL;
+
+
+
