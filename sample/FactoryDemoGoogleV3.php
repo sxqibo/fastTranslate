@@ -24,7 +24,7 @@ $obj  = TranslateFactory::getTranslateObject($type, $config);
 
 
 // 源语言自动识别，翻译为英文
-$addr = $obj->getTranslate('你好', '', 'en', $type);
+$addr = $obj->getTranslate('你好', 'en', $type);
 print '3-1.谷歌V3翻译结果' . json_encode($addr, JSON_UNESCAPED_UNICODE) . PHP_EOL;
 
 

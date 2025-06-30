@@ -23,8 +23,19 @@ final class TranslateForGoogleV2 extends Translate implements TranslateInterface
      * @param string $to 翻译目标
      * @return null
      */
-    public function getTranslation(string $query, string $from, string $to): ?array
+    public function getTranslation(string $query, string $to): ?array
     {
-        return parent::getTranslate($query, '', $to, self::TYPE);
+        return parent::getTranslate($query, $to, self::TYPE);
+    }
+
+    /**
+     * 获取语言
+     * @param string $query
+     * @return mixed
+     * @throws \Exception
+     */
+    public function detectLanguage(string $query)
+    {
+        return parent::detect($query, self::TYPE);
     }
 }

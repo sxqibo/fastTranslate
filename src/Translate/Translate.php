@@ -43,11 +43,10 @@ abstract class Translate implements TranslateInterface
     /**
      * 帮子类调用 http 请求
      * @param string $word
-     * @param string $from
      * @param string $to
      * @return mixed
      */
-    public function getTranslate(string $word, string $from, string $to, $type = 'baidu')
+    public function getTranslate(string $word, string $to, $type = 'baidu')
     {
         $ret = [];
         $common = new Common();
@@ -68,7 +67,7 @@ abstract class Translate implements TranslateInterface
                 'q'     => $word,
                 'appid' => $this->config['app_id'],
                 'salt'  => rand(10000, 99999),
-                'from'  => $from,
+                'from'  => 'auto',
                 'to'    => $to,
 
             );
@@ -92,11 +91,9 @@ abstract class Translate implements TranslateInterface
                 'key' => $this->config['api_key'],
             ]);
 
-            $result = $translate->translate($word, [
+            $ret = $translate->translate($word, [
                 'target' => $to,
             ]);
-
-            $ret = $result['text'] ?? '';
         }
 
         /**
@@ -138,6 +135,22 @@ abstract class Translate implements TranslateInterface
     public function detect(string $word, $type = 'baidu')
     {
         /**
+         * 百度翻译
+         */
+        if ($type == 'baidu') {
+            $ret = 'baidu none';
+
+        }
+
+        /**
+         * 谷歌翻译V2
+         */
+        if ($type == 'googleV2') {
+            $ret = 'googleV2 none';
+
+        }
+
+        /**
          * 谷歌翻译
          */
         if ($type == 'googleV3') {
@@ -149,8 +162,9 @@ abstract class Translate implements TranslateInterface
             $result = $translate->detectLanguage($word);
 
             $ret = $result['languageCode'];
-
         }
+
+
 
         return $ret;
 

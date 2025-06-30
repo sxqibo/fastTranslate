@@ -36,15 +36,28 @@ final class TranslateForBaidu extends Translate implements TranslateInterface
      * @param string $to 翻译目标
      * @return null
      */
-    public function getTranslation(string $query, string $from, string $to): ?array
+    public function getTranslation(string $query, string $to): ?array
     {
-        $result = parent::getTranslate($query, $from, $to, self::TYPE);
+        $result = parent::getTranslate($query, $to, self::TYPE);
 
-        return [
+        $result2 = [
             'language_from' => $result['from'],
             'language_to'   => $result['to'],
             'result_src'    => $result['trans_result'][0]['src'],
             'result_dst'    => $result['trans_result'][0]['dst'],
         ];
+
+        return $result2;
+    }
+
+    /**
+     * 获取语言
+     * @param string $query
+     * @return mixed
+     * @throws \Exception
+     */
+    public function detectLanguage(string $query)
+    {
+        return parent::detect($query, self::TYPE);
     }
 }
