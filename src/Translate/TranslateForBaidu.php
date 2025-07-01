@@ -10,31 +10,19 @@ use Sxqibo\FastTranslate\TranslateInterface;
  */
 final class TranslateForBaidu extends Translate implements TranslateInterface
 {
-    /**
-     * @var string ip地址 或 主机地址
-     */
-    const HOST = 'http://api.fanyi.baidu.com';
-
-    /**
-     * @var string api 的 uri
-     */
-    const URI = '/api/trans/vip/translate';
-
     const TYPE = 'baidu';
 
     public function __construct($config = [])
     {
         parent::__construct($config);
-        $this->host = self::HOST;
-        $this->uri  = self::URI;
     }
 
     /**
      * 获取翻译
      * @param string $query 查询
-     * @param string $from 翻译源
      * @param string $to 翻译目标
-     * @return null
+     * @return array|null
+     * @throws \Exception
      */
     public function getTranslation(string $query, string $to): ?array
     {

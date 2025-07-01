@@ -13,18 +13,6 @@ use Sxqibo\FastTranslate\Util\Common;
 abstract class Translate implements TranslateInterface
 {
     /**
-     * @var string 地址
-     */
-    public string $host = '';
-
-    /**
-     * @var string api 的 uri
-     */
-    public string $uri = '';
-
-
-
-    /**
      * @var array 配置
      */
     public array $config = [];
@@ -72,11 +60,9 @@ abstract class Translate implements TranslateInterface
 
             );
 
-
             $args['sign'] = $common->buildSign($word, $this->config['app_id'], $args['salt'], $this->config['sec_key']);
-            $ret          = $common->call($this->host . $this->uri, $args); // 添加 $options 参数
+            $ret          = $common->call('http://api.fanyi.baidu.com/api/trans/vip/translate', $args); // 通用翻译
             $ret          = json_decode($ret, true);
-
         }
 
         /**
@@ -148,7 +134,6 @@ abstract class Translate implements TranslateInterface
          */
         if ($type == 'baidu') {
             $ret = 'baidu none';
-
         }
 
         /**
@@ -160,7 +145,7 @@ abstract class Translate implements TranslateInterface
         }
 
         /**
-         * 谷歌翻译
+         * 谷歌翻译V3
          */
         if ($type == 'googleV3') {
             if (!$this->config['project_id']) {
@@ -171,9 +156,6 @@ abstract class Translate implements TranslateInterface
             $ret = $translate->detectLanguage($word);
         }
 
-
-
         return $ret;
-
     }
 }
