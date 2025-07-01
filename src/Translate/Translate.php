@@ -19,6 +19,7 @@ abstract class Translate implements TranslateInterface
 
     /**
      * 语言代码映射表
+     * @doc https://cloud.google.com/translate/docs/languages?hl=zh-cn#adaptive_translation
      * @var array
      */
     private array $languageMap = [
