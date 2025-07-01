@@ -17,7 +17,7 @@ $config  = [
 ];
 $type = 'baidu';
 $obj  = TranslateFactory::getTranslateObject($type, $config);
-$addr = $obj->getTranslate('你好', 'auto', 'en', $type); 
+$addr = $obj->getTranslate('你好', 'en', $type); 
 ```
 
 
@@ -37,7 +37,7 @@ $config  = [
 
 $type = 'googleV2';
 $obj  = TranslateFactory::getTranslateObject($type, $config);
-$addr = $obj->getTranslate('你好', '', 'en', $type);
+$addr = $obj->getTranslate('你好', 'en', $type);
 ```
 返回
 ```json
