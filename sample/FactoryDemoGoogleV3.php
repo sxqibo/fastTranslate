@@ -11,11 +11,11 @@ use Sxqibo\FastTranslate\TranslateFactory;
 
 print '----------------------' . PHP_EOL;
 
-putenv('GOOGLE_APPLICATION_CREDENTIALS=./translate2025-464112-dfb3d1d06960.json');
+putenv('GOOGLE_APPLICATION_CREDENTIALS=./translate2025-464112-daa7d0598c52.json');
 
 
 $config  = [
-    'project_id'  => 'translate2025-464112'
+    'project_id'  => ''
 ];
 
 $type = 'googleV3';

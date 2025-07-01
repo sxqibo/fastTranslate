@@ -40,14 +40,13 @@ final class TranslateForBaidu extends Translate implements TranslateInterface
     {
         $result = parent::getTranslate($query, $to, self::TYPE);
 
-        $result2 = [
+        return  [
             'language_from' => $result['from'],
             'language_to'   => $result['to'],
             'result_src'    => $result['trans_result'][0]['src'],
             'result_dst'    => $result['trans_result'][0]['dst'],
         ];
 
-        return $result2;
     }
 
     /**

@@ -83,6 +83,6 @@ curl -X POST "https://translation.googleapis.com/language/translate/v2?key=API_K
 
 打开 Google Cloud 控制台：https://console.cloud.google.com/iam-admin/serviceaccounts
 
-创建一个服务账号，并授予所需的权限（如翻译 API 权限）。
+创建一个服务账号，并授予所需的权限（如翻译 API 权限）
 
-创建密钥，选择 JSON 格式并下载。
+位置： IAM和管理 / 服务账号， 在操作中，点击管理密钥, 创建密钥，选择 JSON 格式并下载, 我下载后的格式是： translate2025-464112-daa7d0598c52.json

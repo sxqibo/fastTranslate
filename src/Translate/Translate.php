@@ -104,10 +104,21 @@ abstract class Translate implements TranslateInterface
                 throw new \Exception('请配置 project_id');
             }
 
-            // 这里只翻译一个
-            $content[0] = $word;
+            // 支持多文本翻译
+            $content = is_array($word) ? $word : [$word];
 
-            $translationClient = new TranslationServiceClient();
+            // 配置请求头和客户端选项
+            $clientConfig = [];
+            if (isset($this->config['http_options'])) {
+                $clientConfig = $this->config['http_options'];
+            }
+                
+            // 添加 Referer 请求头（如果未设置）
+            if (!isset($clientConfig['headers']['Referer'])) {
+                $clientConfig['headers']['Referer'] = $this->config['referer'] ?? 'https://example.com';
+            }
+
+            $translationClient = new TranslationServiceClient($clientConfig);
             $response = $translationClient->translateText(
                 $content,
                 $to,
@@ -116,11 +127,9 @@ abstract class Translate implements TranslateInterface
 
             $result = [];
             foreach ($response->getTranslations() as $key => $translation) {
-                array_push($result, $translation->getTranslatedText());
+                $result[] = $translation->getTranslatedText();
             }
-
-            $ret = $result[0];
-
+            $ret['text'] = $result[0];
         }
 
         return $ret;
@@ -159,9 +168,7 @@ abstract class Translate implements TranslateInterface
             }
 
             $translate = new TranslateClient();
-            $result = $translate->detectLanguage($word);
-
-            $ret = $result['languageCode'];
+            $ret = $translate->detectLanguage($word);
         }
 
 
