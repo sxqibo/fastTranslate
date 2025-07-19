@@ -4,7 +4,8 @@
 
 ## 百度翻译
 
-网址： https://api.fanyi.baidu.com/doc/21  
+网址：https://api.fanyi.baidu.com/doc/21   
+注意：常见语种列表， 有种语种简码  
 优点：百度翻译可以翻译  
 缺点：识别源语言的接口特别有限  
 
@@ -25,6 +26,7 @@ $addr = $obj->getTranslate('你好', 'en', $type);
 
 网址：https://console.cloud.google.com/  
 文档：https://cloud.google.com/translate/docs/
+语言支持： https://cloud.google.com/translate/docs/languages?hl=zh-cn  
 优点： 谷歌翻译可以翻译，但识别源语言的接口特别多   
 缺点： 谷歌翻译V2需要api_key，本地测试需要翻墙， 需要信用卡配额, 网址：https://console.cloud.google.com/billing  
 说明： 谷歌翻译配置比较麻烦，需要创建项目，绑定支付账号， 申请api_key

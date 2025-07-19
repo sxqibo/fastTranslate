@@ -31,8 +31,8 @@ final class TranslateForBaidu extends Translate implements TranslateInterface
         return  [
             'language_from' => $result['from'],
             'language_to'   => $result['to'],
-            'result_src'    => $result['trans_result'][0]['src'],
-            'result_dst'    => $result['trans_result'][0]['dst'],
+            'result_src'    => $result['trans_resource_all'],
+            'result_dst'    => $result['trans_result_all'],
         ];
 
     }

@@ -119,7 +119,19 @@ abstract class Translate implements TranslateInterface
 
             $args['sign'] = $common->buildSign($word, $this->config['app_id'], $args['salt'], $this->config['sec_key']);
             $ret          = $common->call('http://api.fanyi.baidu.com/api/trans/vip/translate', $args); // 通用翻译
-            $ret          = json_decode($ret, true);
+
+            // 结果为N个数组的合并
+            $resource = '';
+            $result = '';
+            $ret = json_decode($ret, JSON_UNESCAPED_UNICODE);
+            if (isset($ret['trans_result']) && is_array($ret['trans_result']) ) {
+                foreach ($ret['trans_result'] as $k => $v) {
+                    $result .= $v['dst'];
+                    $resource .= $v['src'];
+                }
+            }
+            $ret['trans_result_all'] = $result;
+            $ret['trans_resource_all'] = $resource;
         }
 
         /**
