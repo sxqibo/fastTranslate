@@ -126,8 +126,8 @@ abstract class Translate implements TranslateInterface
             $ret = json_decode($ret, JSON_UNESCAPED_UNICODE);
             if (isset($ret['trans_result']) && is_array($ret['trans_result']) ) {
                 foreach ($ret['trans_result'] as $k => $v) {
-                    $result .= $v['dst'];
-                    $resource .= $v['src'];
+                    $result .= $v['dst'].'\n';
+                    $resource .= $v['src'].'\n';
                 }
             }
             $ret['trans_result_all'] = $result;
