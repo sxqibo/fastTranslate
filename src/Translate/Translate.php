@@ -130,8 +130,8 @@ abstract class Translate implements TranslateInterface
                     $resource .= $v['src'].'\n';
                 }
             }
-            $ret['trans_result_all'] = $result;
-            $ret['trans_resource_all'] = $resource;
+            $ret['trans_result_all'] = rtrim($result, '\n');
+            $ret['trans_resource_all'] = rtrim($resource, '\n');
         }
 
         /**
