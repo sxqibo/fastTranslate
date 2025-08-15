@@ -15,8 +15,8 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "7.9.3",
-        "google/cloud-translate": "1.15.4",
+        "guzzlehttp/guzzle": "^7.0",
+        "google/cloud-translate": "^1.21",
         "ext-mbstring": "*",
         "ext-json": "*",
         "ext-curl": "*"
@@ -24,5 +24,6 @@
     "keywords": [
     ],
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "license": "MIT"
 }

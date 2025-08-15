@@ -221,10 +221,30 @@ abstract class Translate implements TranslateInterface
                 throw new \Exception('请配置 project_id');
             }
 
-            $translate = new TranslateClient();
-            $ret = $translate->detectLanguage($word);
+            // 配置请求头和客户端选项
+            $clientConfig = [];
+            if (isset($this->config['http_options'])) {
+                $clientConfig = $this->config['http_options'];
+            }
+                
+            // 添加 Referer 请求头（如果未设置）
+            if (!isset($clientConfig['headers']['Referer'])) {
+                $clientConfig['headers']['Referer'] = $this->config['referer'] ?? 'https://example.com';
+            }
 
-            $ret['language_ch'] = $this->getLanguageName($ret['languageCode']);
+            $translationClient = new TranslationServiceClient($clientConfig);
+            $response = $translationClient->detectLanguage(
+                TranslationServiceClient::locationName($this->config['project_id'], 'global'),
+                [
+                    'content' => $word
+                ]
+            );
+
+            $ret = [
+                'languageCode' => $response->getLanguages()[0]->getLanguageCode(),
+                'confidence' => $response->getLanguages()[0]->getConfidence(),
+                'language_ch' => $this->getLanguageName($response->getLanguages()[0]->getLanguageCode())
+            ];
         }
 
         return $ret;
